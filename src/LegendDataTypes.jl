@@ -1,7 +1,5 @@
 # This file is a part of LegendDataTypes.jl, licensed under the MIT License (MIT).
 
-__precompile__(true)
-
 module LegendDataTypes
 
 using ArraysOfArrays
@@ -13,7 +11,6 @@ using RecipesBase
 using StaticArrays
 using StatsBase
 using StructArrays
-using UnsafeArrays
 using Unitful
 
 import Tables
