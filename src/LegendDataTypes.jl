@@ -6,7 +6,6 @@ using ArraysOfArrays
 using ElasticArrays
 using EncodedArrays
 using RadiationDetectorSignals
-using RadiationSpectra
 using RecipesBase
 using StaticArrays
 using StatsBase
