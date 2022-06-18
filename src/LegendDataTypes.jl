@@ -5,7 +5,6 @@ module LegendDataTypes
 using ArraysOfArrays
 using ElasticArrays
 using EncodedArrays
-using RadiationDetectorSignals
 using RecipesBase
 using StaticArrays
 using StatsBase
