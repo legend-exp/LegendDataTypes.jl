@@ -104,7 +104,7 @@ function setunits! end
 
 
 function units_from_string(s::AbstractString)
-    if isempty(s)
+    if isempty(s) || s == "none"
         NoUnits
     else
         try
