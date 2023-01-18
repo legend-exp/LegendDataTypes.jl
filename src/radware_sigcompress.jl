@@ -264,7 +264,7 @@ function read_from_properties(read_property::Function, src::Any, ::Type{RadwareS
     RadwareSigcompress(shft)
 end
 
-function write_to_properties!(write_property::Function, dest::Any, codec::RadwareSigcompress) where T
+function write_to_properties!(write_property::Function, dest::Any, codec::RadwareSigcompress)
     write_property(dest, :radware_sigcompress_shift, codec.shift)
     nothing
 end
