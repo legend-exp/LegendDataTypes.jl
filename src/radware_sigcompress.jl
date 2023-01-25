@@ -76,15 +76,15 @@ function _radware_sigcompress_encode_impl!(sig_out::AbstractVector{UInt8}, sig_i
         _set_hton_u16!(sig_out, @_pincr(iso), UInt16(sig_len_in))  # signal length
         while (j <= sig_len_in)         # j = starting index of section of signal
             # find optimal method and length for compression of next section of signal
-            si_j = Int32(sig_in[j] + shift)
+            si_j = Int16(sig_in[j] + shift)
             max1 = min1 = si_j
             max2 = Int32(-16000)
             min2 = Int32(16000)
             nb1 = nb2 = 2
             nw = 1
             i=j+1; while (i <= sig_len_in && i < j+48)  # FIXME; # 48 could be tuned better?
-                si_i = Int32(sig_in[i] + shift)
-                si_im1 = Int32(sig_in[i-1] + shift)
+                si_i = Int16(sig_in[i] + shift)
+                si_im1 = Int16(sig_in[i-1] + shift)
                 if (max1 < si_i) max1 = si_i end
                 if (min1 > si_i) min1 = si_i end
                 ds = si_i - si_im1
@@ -98,7 +98,7 @@ function _radware_sigcompress_encode_impl!(sig_out::AbstractVector{UInt8}, sig_i
                 while (max1 - min1 > mask[nb1]) @_pincr(nb1) end
                 #for (; i <= sig_len_in && i < j+len[nb1]; @_pincr(i)) {
                 while (i <= sig_len_in && i < j+128)  # FIXME; # 128 could be tuned better?
-                    si_i = Int32(sig_in[i] + shift)
+                    si_i = Int16(sig_in[i] + shift)
                     if (max1 < si_i) max1 = si_i end
                     dd1 = max1 - min1
                     if (min1 > si_i) dd1 = max1 - si_i end
@@ -112,8 +112,8 @@ function _radware_sigcompress_encode_impl!(sig_out::AbstractVector{UInt8}, sig_i
                 while (max2 - min2 > mask[nb2]) @_pincr(nb2) end
                 #for (; i <= sig_len_in && i < j+len[nb1]; @_pincr(i)) {
                 while (i <= sig_len_in && i < j+128)  # FIXME; # 128 could be tuned better?
-                    si_i = Int32(sig_in[i] + shift)
-                    si_im1 = Int32(sig_in[i-1] + shift)
+                    si_i = Int16(sig_in[i] + shift)
+                    si_im1 = Int16(sig_in[i-1] + shift)
                     ds = si_i - si_im1
                     if (max2 < ds) max2 = ds end
                     dd2 = max2 - min2
@@ -135,7 +135,7 @@ function _radware_sigcompress_encode_impl!(sig_out::AbstractVector{UInt8}, sig_i
                 _set_hton_u16!(sig_out, @_pincr(iso), min1 % UInt16)  # min value used for encoding
                 i = iso; while (i <= iso + div(nw*nb1, 16)) _set_hton_u16!(sig_out, i, 0); @_pincr(i) end
                 i = j; while (i < j + nw)
-                    si_i = Int32(sig_in[i] + shift)
+                    si_i = Int16(sig_in[i] + shift)
                     dd = si_i - min1              # value to encode
                     dd = dd << (32 - bp - nb1)
                     _set_hton_u16!(sig_out, iso, _get_hton_u16(sig_out, iso) | _get_high_u16(dd))
@@ -153,8 +153,8 @@ function _radware_sigcompress_encode_impl!(sig_out::AbstractVector{UInt8}, sig_i
                 _set_hton_u16!(sig_out, @_pincr(iso), min2 % UInt16)       # min value used for encoding
                 i = iso; while (i <= iso + div(nw*nb2, 16)) _set_hton_u16!(sig_out, i, 0); @_pincr(i) end
                 i = j+1; while (i < j + nw)
-                    si_i = Int32(sig_in[i] + shift)
-                    si_im1 = Int32(sig_in[i-1] + shift)
+                    si_i = Int16(sig_in[i] + shift)
+                    si_im1 = Int16(sig_in[i-1] + shift)
                     dd = si_i - si_im1 - min2     # value to encode
                     dd = dd << (32 - bp - nb2)
                     _set_hton_u16!(sig_out, iso, _get_hton_u16(sig_out, iso) | _get_high_u16(dd))
