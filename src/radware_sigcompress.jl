@@ -287,11 +287,11 @@ end
 
 
 function read_from_properties(read_property::Function, src::Any, ::Type{RadwareSigcompress})
-    shft = read_property(src, :radware_sigcompress_shift, 0)
+    shft = read_property(src, :codec_shift, 0)
     RadwareSigcompress(shft)
 end
 
 function write_to_properties!(write_property::Function, dest::Any, codec::RadwareSigcompress)
-    write_property(dest, :radware_sigcompress_shift, codec.shift)
+    write_property(dest, :codec_shift, codec.shift)
     nothing
 end
