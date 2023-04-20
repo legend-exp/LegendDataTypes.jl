@@ -10,6 +10,7 @@ using StaticArrays
 using StatsBase
 using StructArrays
 using Unitful
+using UnitfulAtomic
 
 import Tables
 import TypedTables
