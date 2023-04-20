@@ -110,6 +110,7 @@ function units_from_string(s::AbstractString)
         try
             uparse(s)
         catch e
+            s == "e" && return u"e_au" # parse "e" as u"e_au" from UnitfulAtomic
             if e isa ErrorException
                 rethrow(ArgumentError("Unknown physical unit \"$s\""))
             else
