@@ -108,7 +108,7 @@ function units_from_string(s::AbstractString)
         NoUnits
     else
         try
-            uparse(s)
+            uparse(s, unit_context=[Unitful, UnitfulAtomic])
         catch e
             s == "e" && return u"e_au" # parse "e" as u"e_au" from UnitfulAtomic
             if e isa ErrorException
@@ -120,4 +120,4 @@ function units_from_string(s::AbstractString)
     end
 end
 
-units_to_string(u::Unitful.Unitlike) = "$u"
+units_to_string(u::Unitful.Unitlike) = string(u)

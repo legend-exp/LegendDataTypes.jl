@@ -11,6 +11,7 @@ using StatsBase
 using StructArrays
 using Unitful
 using UnitfulAtomic
+using UnitfulParsableString
 
 import Tables
 import TypedTables
