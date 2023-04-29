@@ -27,6 +27,7 @@ include("abstract_io.jl")
 include("output_generation.jl")
 include("radware_sigcompress.jl")
 include("utils.jl")
+include("data_filters.jl")
 
 
 const array_codecs = TypeRegistry{AbstractArrayCodec}()
