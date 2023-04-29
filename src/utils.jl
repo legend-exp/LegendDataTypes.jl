@@ -58,12 +58,12 @@ end
 
 
 """
-    flatten_by_channel(data::AbstractVector{<:IdDict{<:Integer, <:AbstractVector}})::IdDict
+    flatten_by_key(data::AbstractVector{<:IdDict{<:Any, <:AbstractVector}})::IdDict
 
 Flattens a vector of IdDicts into a single IdDict, by concatenating the
 entries for each key separately.
 """
-function flatten_by_channel(data::AbstractVector{<:IdDict{<:Integer, <:AbstractVector}})
+function flatten_by_key(data::AbstractVector{<:IdDict{<:Any, <:AbstractVector}})
     ks = keys(first(data))
     IdDict((k => fast_flatten([d[k] for d in data]) for k in ks))
 end
