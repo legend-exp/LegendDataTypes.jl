@@ -5,6 +5,7 @@ module LegendDataTypes
 using ArraysOfArrays
 using ElasticArrays
 using EncodedArrays
+using IntervalSets
 using RecipesBase
 using StaticArrays
 using StatsBase
