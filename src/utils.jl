@@ -69,6 +69,9 @@ function flatten_by_key(data::AbstractVector{<:IdDict{<:Any, <:AbstractVector}})
 end
 
 
+_flatten_chunks(xs::AbstractVector{<:AbstractArray}) = fast_flatten(xs)
+_flatten_chunks(xs::AbstractVector{<:IdDict}) = flatten_by_key(xs)
+
 """
     map_chunked(f, table, chunk_size::Integer)
 
@@ -80,5 +83,5 @@ block-wise indexing.
 """
 function map_chunked(f, table, chunk_size::Integer)
     idxs_partition = Iterators.partition(eachindex(table), chunk_size)
-    fast_flatten([f(table[idxs]) for idxs in idxs_partition])
+    _flatten_chunks([f(table[idxs]) for idxs in idxs_partition])
 end
