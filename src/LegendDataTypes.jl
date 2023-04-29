@@ -2,6 +2,8 @@
 
 module LegendDataTypes
 
+using Printf
+
 using ArraysOfArrays
 using ElasticArrays
 using EncodedArrays
