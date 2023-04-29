@@ -1,5 +1,14 @@
 # This file is a part of LegendDataTypes.jl, licensed under the MIT License (MIT).
 
+"""
+    TableLike = AbstractVector{<:NamedTuple}
+
+The type must also support the Tables.jl interface.
+
+Examples are `TypedTables.Table` and `StructArrays.StructArray`
+"""
+const TableLike = AbstractVector{<:NamedTuple}
+
 
 @enum DAQType daq_gerda=0x38bce998
 export DAQType, daq_gerda
