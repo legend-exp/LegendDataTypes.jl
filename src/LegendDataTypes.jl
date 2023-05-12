@@ -5,6 +5,7 @@ module LegendDataTypes
 using Printf
 
 using ArraysOfArrays
+using BitOperations
 using ElasticArrays
 using EncodedArrays
 using IntervalSets
