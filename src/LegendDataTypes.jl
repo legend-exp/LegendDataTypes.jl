@@ -27,6 +27,7 @@ include("array_codecs.jl")
 include("abstract_io.jl")
 include("output_generation.jl")
 include("radware_sigcompress.jl")
+include("ans_coding.jl")
 include("utils.jl")
 include("data_filters.jl")
 
