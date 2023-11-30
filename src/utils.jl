@@ -37,6 +37,8 @@ fast_flatten(xs::AbstractVector{<:VectorOfSimilarArrays{T,M}}) where {T,M} = Vec
 
 fast_flatten(xs::AbstractVector{<:AbstractArray{<:NamedTuple}}) = _flatten_on_tables(xs)
 
+fast_flatten(xs::Base.ValueIterator) = fast_flatten(collect(xs))
+
 function _flatten_on_tables(xs)
     xs_1 = first(xs)
     ctor = Tables.materializer(xs_1)
