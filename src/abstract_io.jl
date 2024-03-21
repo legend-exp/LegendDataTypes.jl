@@ -106,6 +106,8 @@ function setunits! end
 function units_from_string(s::AbstractString)
     if isempty(s) || s == "none"
         NoUnits
+    elseif s == "adc" || s == "ADC"
+        NoUnits
     else
         try
             uparse(s, unit_context=[Unitful, UnitfulAtomic])
