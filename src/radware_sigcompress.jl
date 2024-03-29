@@ -256,7 +256,9 @@ function _radware_sigcompress_decode_impl!(sig_out::AbstractVector{<:Integer}, s
             throw(ErrorException("ERROR in decompress_signal: outlen $outlen != siglen $siglen"))
         end
 
-        resize!(sig_out, siglen)
+        if (length(eachindex(sig_out)) != siglen)
+            resize!(sig_out, siglen)
+        end
     end
 
     return sig_out
