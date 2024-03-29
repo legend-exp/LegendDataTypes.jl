@@ -34,8 +34,11 @@ const array_codecs = TypeRegistry{AbstractArrayCodec}()
 
 
 function __init__()
-    array_codecs[:varlend_diff1] = VarlenDiffArrayCodec
+    array_codecs[:uleb128_zigzag_diff] = VarlenDiffArrayCodec
     array_codecs[:radware_sigcompress] = RadwareSigcompress
+
+    # ToDo: Remove, deprecated:
+    array_codecs[:varlend_diff1] = VarlenDiffArrayCodec
 end
 
 end # module
