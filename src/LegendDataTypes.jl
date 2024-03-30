@@ -20,6 +20,8 @@ import Tables
 import TypedTables
 import Colors
 
+using RadiationDetectorSignals: RDWaveform
+
 include("daq.jl")
 include("type_registry.jl")
 include("array_codecs.jl")
