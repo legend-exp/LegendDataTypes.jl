@@ -87,3 +87,23 @@ function map_chunked(f, table, chunk_size::Integer)
     idxs_partition = Iterators.partition(eachindex(table), chunk_size)
     _flatten_chunks([f(table[idxs]) for idxs in idxs_partition])
 end
+
+
+"""
+    decode_data(data)
+
+Decode any encoded arrays present in (possibly nested) data.
+"""
+function decode_data end
+export decode_data
+
+decode_data(A::EncodedArray) = collect(A)
+decode_data(A::VectorOfEncodedSimilarArrays) = collect.(A)
+decode_data(A::AbstractVector{<:EncodedArray}) = collect.(A)
+
+decode_data(data) = data
+decode_data(x::Tuple) = map(decode_data, x)
+decode_data(x::NamedTuple) = map(decode_data, x)
+decode_data(tbl::TypedTables.Table) = (map(decode_data, Tables.columns(tbl)))
+decode_data(tbl::StructArray{T}) where T = StructArray{T}(map(decode_data, Tables.columns(tbl)))
+decode_data(wf::RDWaveform) = RDWaveform(wf.time, decode_data(wf.signal))
