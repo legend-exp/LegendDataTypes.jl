@@ -1,6 +1,6 @@
 name = "LegendDataTypes"
 uuid = "99e09c13-5545-5ee2-bfa2-77f358fb75d8"
-version = "0.1.7"
+version = "0.1.8"
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
