@@ -33,7 +33,7 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/LegendDataTypes/LegendDataTypes.jl.git",
+    repo = "github.com/legend-exp/LegendDataTypes.jl.git",
     forcepush = true,
     push_preview = true,
 )
