@@ -20,7 +20,7 @@ makedocs(
     modules = [LegendDataTypes],
     format = Documenter.HTML(
         prettyurls = !("local" in ARGS),
-        canonical = "https://LegendDataTypes.github.io/LegendDataTypes.jl/stable/"
+        canonical = "https://legend-exp.github.io/LegendDataTypes.jl/stable/"
     ),
     pages = [
         "Home" => "index.md",
