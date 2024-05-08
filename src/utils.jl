@@ -59,6 +59,30 @@ _append_lastdims_tplentry(tpls, ::Val{i}) where i = fast_flatten(map(x -> x[i], 
 end
 
 
+function fast_flatten(xs::AbstractVector{<:VectorOfEncodedArrays{T}}) where T
+    @argcheck length(xs) >= 1
+    codecs = (x -> x.codec).(xs)
+    codec = first(codecs)
+    @argcheck all(isequal(codec), codecs)
+    innersizes = fast_flatten((x -> x.innersizes).(xs))
+    encoded = fast_flatten((x -> x.encoded).(xs))
+    return VectorOfEncodedArrays{T}(codec, innersizes, encoded)
+end
+
+function fast_flatten(xs::AbstractVector{<:VectorOfEncodedSimilarArrays{T}}) where T
+    @argcheck length(xs) >= 1
+    codecs = (x -> x.codec).(xs)
+    codec = first(codecs)
+    @argcheck all(isequal(codec), codecs)
+    innersizes = (x -> x.innersize).(xs)
+    innersize = first(innersizes)
+    @argcheck all(isequal(innersize), innersizes)
+    encoded = fast_flatten((x -> x.encoded).(xs))
+    return VectorOfEncodedSimilarArrays{T}(codec, innersize, encoded)
+end
+
+
+
 """
     flatten_by_key(data::AbstractVector{<:IdDict{<:Any, <:AbstractVector}})::IdDict
 
