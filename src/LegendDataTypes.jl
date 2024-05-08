@@ -20,6 +20,7 @@ import Tables
 import TypedTables
 import Colors
 
+using ArgCheck: @argcheck
 using RadiationDetectorSignals: RDWaveform
 
 include("daq.jl")
