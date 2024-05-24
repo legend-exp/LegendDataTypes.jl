@@ -102,11 +102,12 @@ handle.
 """
 function setunits! end
 
+const _pseudo_unit_expr = r"(^|[^A-Za-z])(ADC|adc|sample)([^A-Za-z]|$)"
 
 function units_from_string(s::AbstractString)
     if isempty(s) || s == "none"
         NoUnits
-    elseif s == "adc" || s == "ADC" || s == "ADC/sample"
+    elseif !isnothing(match(_pseudo_unit_expr, s))
         NoUnits
     else
         try
