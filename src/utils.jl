@@ -128,8 +128,7 @@ decode_data(A::AbstractVector{<:EncodedArray}) = collect.(A)
 decode_data(data) = data
 decode_data(x::Tuple) = map(decode_data, x)
 decode_data(x::NamedTuple) = map(decode_data, x)
-decode_data(tbl::TypedTables.Table) = (map(decode_data, Tables.columns(tbl)))
-decode_data(tbl::StructArray{T}) where T = StructArray{T}(map(decode_data, Tables.columns(tbl)))
+decode_data(tbl::AbstractVector{<:NamedTuple}) = similar_table(tbl, map(decode_data, Tables.columns(tbl)))
 decode_data(wf::RDWaveform) = RDWaveform(wf.time, decode_data(wf.signal))
 
 
