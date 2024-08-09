@@ -21,7 +21,7 @@ import TypedTables
 import Colors
 
 using ArgCheck: @argcheck
-using RadiationDetectorSignals: RDWaveform
+using RadiationDetectorSignals: RDWaveform, ArrayOfRDWaveforms
 
 include("daq.jl")
 include("type_registry.jl")
