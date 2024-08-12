@@ -43,20 +43,11 @@ function _flatten_on_tables(xs)
     xs_1 = first(xs)
     ctor = Tables.materializer(xs_1)
     # ToDo: Avoid allcation due to broadcast of columns, if possible:
-    ctor(_flatten_on_columns(Tables.columns.(xs)))
+    ctor(flatten_by_key(Tables.columns.(xs)))
 end
 
-fast_flatten(xs::AbstractVector{<:StructArray{T}}) where T = StructArray{T}(_flatten_on_columns(StructArrays.components.(xs)))
+fast_flatten(xs::AbstractVector{<:StructArray{T}}) where T = StructArray{T}(flatten_by_key(StructArrays.components.(xs)))
 
-# ToDo: Avoid copy due to map, if possible:
-_append_lastdims_tplentry(tpls, ::Val{i}) where i = fast_flatten(map(x -> x[i], tpls))
-
-@generated function _flatten_on_columns(nts::AbstractVector{<:NamedTuple{names}}) where names
-    tpl_expr = :(())
-    exprs = [:(_append_lastdims_tplentry(values(nts), Val($i))) for i in eachindex(names)]
-    append!(tpl_expr.args, exprs)
-    :(NamedTuple{$names}($tpl_expr))
-end
 
 
 function fast_flatten(xs::AbstractVector{<:VectorOfEncodedArrays{T}}) where T
@@ -92,6 +83,17 @@ entries for each key separately.
 function flatten_by_key(data::AbstractVector{<:IdDict{<:Any, <:AbstractVector}})
     ks = keys(first(data))
     IdDict((k => fast_flatten([d[k] for d in data]) for k in ks))
+end
+
+
+# ToDo: Avoid copy due to map, if possible:
+_append_lastdims_tplentry(tpls, ::Val{i}) where i = fast_flatten(map(x -> x[i], tpls))
+
+@generated function flatten_by_key(nts::AbstractVector{<:NamedTuple{names}}) where names
+    tpl_expr = :(())
+    exprs = [:(_append_lastdims_tplentry(values(nts), Val($i))) for i in eachindex(names)]
+    append!(tpl_expr.args, exprs)
+    :(NamedTuple{$names}($tpl_expr))
 end
 
 
