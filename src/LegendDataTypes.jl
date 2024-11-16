@@ -18,7 +18,6 @@ using UnitfulParsableString
 
 import Tables
 import TypedTables
-import Colors
 
 using ArgCheck: @argcheck
 using RadiationDetectorSignals: RDWaveform, ArrayOfRDWaveforms
