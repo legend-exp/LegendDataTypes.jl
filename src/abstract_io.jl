@@ -114,6 +114,8 @@ function units_from_string(s::AbstractString)
             uparse(s, unit_context=[Unitful, UnitfulAtomic])
         catch e
             s == "e" && return u"e_au" # parse "e" as u"e_au" from UnitfulAtomic
+            s == "o/oo" && return u"permille" # parse "o/oo" as u"permille" from Unitful
+            s = "o/o" && return u"percent" # parse "o/o" as u"percent" from Unitful
             if e isa ErrorException
                 rethrow(ArgumentError("Unknown physical unit \"$s\""))
             else
