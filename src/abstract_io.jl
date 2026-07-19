@@ -62,17 +62,22 @@ end
 
 
 """
-    readdata(input, SomeDataType::Type)
+    readdata(input, name::AbstractString)
+    readdata(input, name::AbstractString, SomeDataType::Type)
 
-Read a value of type `SomeDataType` from `input`.
+Read the value stored under `name` from `input`.
+
+LEGEND I/O packages add methods for the I/O-object types they handle.
 """
 function readdata end
 
 
 """
-    readdata(input, x::SomeDataType)
+    writedata(output, name::AbstractString, x)
 
-Write a value `x` to `output`.
+Write a value `x` under `name` to `output`.
+
+LEGEND I/O packages add methods for the I/O-object types they handle.
 """
 function writedata end
 
@@ -89,7 +94,7 @@ function getunits end
 
 @inline getunits(x::Any) = Unitful.unit(x)
 
-Base.@pure getunits(::Nothing) = NoUnits
+@inline getunits(::Nothing) = NoUnits
 
 
 """
