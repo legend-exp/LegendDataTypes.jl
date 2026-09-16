@@ -109,23 +109,27 @@ function setunits! end
 
 const _pseudo_unit_expr = r"(^|[^A-Za-z])(ADC|adc|sample)([^A-Za-z]|$)"
 
+# Unit strings that name something else in the unit modules, or nothing at all.
+const _unit_aliases = Dict("e" => u"e_au", "o/oo" => u"permille", "o/o" => u"percent")
+
+# A unit expression is evaluated here rather than with `eval`, which cannot run while a
+# package reading units in its precompile workload is precompiled. `Unitful.lookup_units`
+# has replaced the unit symbols by their units and admits only arithmetic on them.
+_eval_units(x) = x
+_eval_units(ex::Expr) = getfield(Base, ex.args[1])(map(_eval_units, ex.args[2:end])...)
+
 function units_from_string(s::AbstractString)
     if isempty(s) || s == "none"
         NoUnits
     elseif !isnothing(match(_pseudo_unit_expr, s))
         NoUnits
+    elseif haskey(_unit_aliases, s)
+        _unit_aliases[s]
     else
         try
-            uparse(s, unit_context=[Unitful, UnitfulAtomic])
-        catch e
-            s == "e" && return u"e_au" # parse "e" as u"e_au" from UnitfulAtomic
-            s == "o/oo" && return u"permille" # parse "o/oo" as u"permille" from Unitful
-            s == "o/o" && return u"percent" # parse "o/o" as u"percent" from Unitful
-            if e isa ErrorException
-                rethrow(ArgumentError("Unknown physical unit \"$s\""))
-            else
-                rethrow(e)
-            end
+            _eval_units(Unitful.lookup_units([Unitful, UnitfulAtomic], Meta.parse(s)))
+        catch
+            throw(ArgumentError("Unknown physical unit \"$s\""))
         end
     end
 end

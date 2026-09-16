@@ -15,6 +15,7 @@ using StructArrays
 using Unitful
 using UnitfulAtomic
 using UnitfulParsableString
+using PrecompileTools: @compile_workload
 
 import Tables
 import TypedTables
@@ -30,6 +31,7 @@ include("output_generation.jl")
 include("radware_sigcompress.jl")
 include("utils.jl")
 include("data_filters.jl")
+include("precompile.jl")
 
 
 const array_codecs = TypeRegistry{AbstractArrayCodec}()

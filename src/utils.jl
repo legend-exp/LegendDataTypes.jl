@@ -13,6 +13,9 @@ function fast_flatten end
 fast_flatten(xs::AbstractVector{<:AbstractArray}) = _fast_flatten_generic(xs)
 
 function _fast_flatten_generic(xs::AbstractVector{<:AbstractArray{T,N}}) where {T,N}
+    # Vectors go through Base, which compiles in a fraction of the time of the code below,
+    # once for every element type a table holds.
+    N == 1 && return reduce(vcat, xs)
     x1 = first(xs)
     sz1 = size(x1)
     inner_sz = ntuple(i -> sz1[i], Val(N-1))
@@ -86,14 +89,14 @@ function flatten_by_key(data::AbstractVector{<:IdDict{<:Any, <:AbstractVector}})
 end
 
 
-# ToDo: Avoid copy due to map, if possible:
-_append_lastdims_tplentry(tpls, ::Val{i}) where i = fast_flatten(map(x -> x[i], tpls))
-
-@generated function flatten_by_key(nts::AbstractVector{<:NamedTuple{names}}) where names
-    tpl_expr = :(())
-    exprs = [:(_append_lastdims_tplentry(values(nts), Val($i))) for i in eachindex(names)]
-    append!(tpl_expr.args, exprs)
-    :(NamedTuple{$names}($tpl_expr))
+# Each column is flattened by a call dispatched on its own type at run time: the columns of
+# a table share few types, while code specialized on the position of every column of a wide
+# table takes seconds to compile. The rows are hidden from inference for the same reason: a
+# column picked by name from a wide row has a union of every column type otherwise.
+function flatten_by_key(nts::AbstractVector{<:NamedTuple{names}}) where names
+    rows = Base.inferencebarrier(nts)
+    cols = Any[fast_flatten([nt[k] for nt in rows]) for k in names]
+    NamedTuple{names}(Tuple(cols))
 end
 
 
